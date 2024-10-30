@@ -1,0 +1,11 @@
+apiVersion: snapshot.kubevirt.io/v1alpha1
+kind: VirtualMachineRestore
+metadata:
+  name: "{{ vm_name }}-restore-snapshot-01"
+  namespace: "{{ vm_namespace }}"
+spec:
+  target:
+    apiGroup: kubevirt.io
+    kind: VirtualMachine
+    name: rhel8-vm-01
+  virtualMachineSnapshotName: "{{ vm_name }}-snapshot-01"

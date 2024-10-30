@@ -1,0 +1,10 @@
+---
+ansible-navigator:
+  execution-environment:
+    container-engine: podman
+    enabled: true
+    image: quay.io/weishen/ocpv-ee:latest
+    pull:
+      policy: never
+  logging:
+    level: debug

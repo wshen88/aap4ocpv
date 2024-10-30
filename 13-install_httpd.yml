@@ -1,0 +1,42 @@
+---
+# Playbook to install and configure Apache web server on a Linux system 
+- name: Install Apache Web Server
+  hosts: all
+  become: yes 
+
+  tasks: 
+  - name: Install Apache package 
+    yum: 
+      name: httpd 
+      state: present 
+  
+  - name: Start and enable Apache service
+    systemd: 
+      name: httpd 
+      state: started 
+      enabled: yes 
+
+  - name: Create a basic index.html file
+    template: 
+      src: files/index.html
+      dest: /var/www/html/index.html 
+      owner: apache 
+      group: apache 
+      mode: 0644 
+
+  - name: Restart Apache service
+    service: 
+      name: httpd 
+      state: restarted 
+
+  - name: Verify Apache is running 
+    ansible.builtin.uri:
+      url: http://localhost/ 
+      status_code: 200 
+      follow_redirects: yes 
+      validate_certs: no 
+    register: web_response 
+
+  - name: Print available updates
+    ansible.builtin.debug:
+      var: web_response

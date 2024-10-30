@@ -1,0 +1,75 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: "{{ vm_name }}"
+  namespace: "{{ vm_namespace }}"
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        creationTimestamp: null
+        name: "{{ vm_name }}"
+      spec:
+        source:
+          pvc:
+            name: rhel8.10-gold-image
+            namespace: openshift-virtualization-os-images
+  running: true
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: rhel8
+        vm.kubevirt.io/workload: server
+      creationTimestamp: null
+      labels:
+        kubevirt.io/domain: "{{ vm_name }}"
+        kubevirt.io/size: small
+    spec:
+      architecture: amd64
+      domain:
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+            - disk:
+                bus: scsi
+              name: "{{ vm_name }}-disk-3"
+          interfaces:
+            - bridge: {}
+              model: virtio
+              name: nic1
+          networkInterfaceMultiqueue: true
+          rng: {}
+        machine:
+          type: pc-q35-rhel9.2.0
+        memory:
+          guest: "{{ vm_memory }}"
+        resources: {}
+      networks:
+        - name: nic1
+          multus: {
+            "networkName": "default/public-network-continental-alpaca"
+          }
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: "{{ vm_name }}"
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              ssh_pwauth: true
+              user: "{{ vm_user }}"
+              password: "{{ vm_passwd }}"
+              chpasswd: { expire: False }
+          name: cloudinitdisk
+        - dataVolume:
+            hotpluggable: true
+            name: "{{ vm_name }}-disk-3"
+          name: "{{ vm_name }}-disk-3"

@@ -1,0 +1,27 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: "{{ vm_name }}"
+  namespace: "{{ vm_namespace }}"
+spec:
+  running: true
+  template:
+    spec:
+      domain:
+        devices:
+          interfaces:
+            - bridge: {}
+              model: virtio
+              name: nic1
+            - masquerade: {}
+              model: virtio
+              name: nic2
+          networkInterfaceMultiqueue: true
+          rng: {}
+      networks:
+        - name: nic1
+          multus: {
+            "networkName": "default/public-network-continental-alpaca"
+          }
+        - name: nic2
+          pod: {}

@@ -1,0 +1,7 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: "{{ vm_name }}"
+  namespace: "{{ vm_namespace }}"
+spec:
+  running: false

@@ -1,0 +1,9 @@
+---
+vm_namespace: wm-test2
+vm_name: rhel8-vm-01
+vm_cpu_cores: 1
+vm_memory: 2Gi
+vm_storage: 30Gi
+vm_user: cloud-user
+vm_passwd: 'redhat123'
+vm_newstorage: 1Gi

@@ -1,0 +1,16 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: "{{ vm_name }}"
+  namespace: "{{ vm_namespace }}"
+spec:
+  template:
+    spec:
+      architecture: amd64
+      domain:
+        cpu:
+          cores: {{ vm_cpu_cores }}
+          sockets: 1
+          threads: 1
+        memory:
+          guest: "{{ vm_memory }}"

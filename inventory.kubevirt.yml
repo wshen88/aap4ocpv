@@ -1,0 +1,4 @@
+---
+plugin: redhat.openshift_virtualization.kubevirt
+host: https://api.ocp4.example.com:6443
+validate_certs: false
