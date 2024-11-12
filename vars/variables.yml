@@ -1,5 +1,5 @@
 ---
-openshift_fqdn: https://api.cluster-86lkv.dynamic.redhatworkshops.io:6443
+openshift_fqdn: https://api.ocp4.example.com:6443
 openshift_user: test1
 openshift_password: Redhat!23
 vm_namespace: wm-test2
