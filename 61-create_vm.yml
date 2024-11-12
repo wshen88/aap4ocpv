@@ -1,0 +1,91 @@
+- name: Create a virtual machine
+  hosts: localhost
+  vars:
+    openshift_fqdn: https://api.cluster-86lkv.dynamic.redhatworkshops.io:6443
+    openshift_user: admin
+    openshift_password: HeNZdXYeQdiMXX2y
+  vars_files:
+    - ./vars/variables.yml
+
+  tasks:
+    - name: Login to OpenShift
+      redhat.openshift.openshift_auth:
+        host: "{{ openshift_fqdn }}"
+        username: "{{ openshift_user }}"
+        password: "{{ openshift_password }}"
+        validate_certs: false
+      register: openshift_auth_results
+
+    - name: Print authentication rsults
+      ansible.builtin.debug:
+        var: openshift_auth_results
+
+    - name: Create a VirtualMachine with a DataVolume template
+      redhat.openshift_virtualization.kubevirt_vm:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ openshift_fqdn }}"
+        validate_certs: false
+        state: present
+        name: "{{ vm_name }}"
+        namespace: "{{ vm_namespace }}"
+        labels:
+          app: testdb
+        data_volume_templates:
+          - apiVersion: cdi.kubevirt.io/v1beta1
+            kind: DataVolume
+            metadata:
+              name: "{{ vm_name }}"
+            spec:
+              sourceRef:
+                kind: DataSource
+                name: rhel8
+                namespace: openshift-virtualization-os-images
+              storage:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: "{{ vm_storage }}"
+        spec:
+          architecture: amd64
+          domain:
+            cpu:
+              cores: "{{ vm_cpu_cores }}"
+              sockets: 1
+              threads: 1
+            devices:
+              disks:
+                - disk:
+                    bus: virtio
+                  name: rootdisk
+                - disk:
+                    bus: virtio
+                  name: cloudinitdisk
+              interfaces:
+                - masquerade: {}
+                  model: virtio
+                  name: nic1
+              networkInterfaceMultiqueue: true
+              rng: {}
+            machine:
+              type: pc-q35-rhel9.2.0
+            memory:
+              guest: "{{ vm_memory }}"
+            resources: {}
+          networks:
+            - name: nic1
+              pod: {}
+          terminationGracePeriodSeconds: 180
+          volumes:
+            - dataVolume:
+                name: "{{ vm_name }}"
+              name: rootdisk
+            - cloudInitNoCloud:
+                userData: |-
+                  #cloud-config
+                  ssh_pwauth: true
+                  user: "{{ vm_user }}"
+                  password: "{{ vm_passwd }}"
+                  chpasswd: { expire: False }
+              name: cloudinitdisk
+        wait: true
