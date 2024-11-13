@@ -1,5 +1,8 @@
 ---
-vm_namespace: wm-test2
+openshift_fqdn: https://api.ocp4.example.com:6443
+openshift_user: test1
+openshift_password: Redhat!23
+vm_namespace: wm-test
 vm_name: rhel8-vm-01
 vm_cpu_cores: 1
 vm_memory: 2Gi
