@@ -24,6 +24,7 @@
         state: present
         name: "{{ vm_name }}"
         namespace: "{{ vm_namespace }}"
+        labels:
           app: "{{ vm_name }}"
         data_volume_templates:
           - apiVersion: cdi.kubevirt.io/v1beta1
