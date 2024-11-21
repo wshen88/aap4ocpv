@@ -34,13 +34,12 @@
             spec:
               source:
                 pvc:
-                  name: rhel-8.10-gold-image
+                  name: rhel-9.4-gold-image
                   namespace: openshift-virtualization-os-images
               storage:
                 resources:
                   requests:
                     storage: "{{ vm_storage }}"
-                storageClassName: lvms-vg-ms-node
         spec:
           architecture: amd64
           domain:
