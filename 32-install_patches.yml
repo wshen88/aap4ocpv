@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: yes
+  vars:
+    mypatch: "RHBA-2024:4253"
+  tasks:
+    - name: Install patches
+      ansible.builtin.command: "yum update --advisory={{ mypatch }} -y"
