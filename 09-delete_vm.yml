@@ -26,4 +26,3 @@
         host: "{{ openshift_fqdn }}"
         validate_certs: false
         state: absent
-        template: templates/rhel-vm.yml
