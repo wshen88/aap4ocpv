@@ -7,4 +7,4 @@ spec:
   source:
     apiGroup: kubevirt.io
     kind: VirtualMachine
-    name: rhel8-vm-01
+    name: "{{ vm_name }}"

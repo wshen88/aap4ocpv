@@ -1,4 +1,4 @@
-- name: Take a snapshot for a VM
+- name: Restore a snapshot for a VM
   hosts: localhost
   vars:
     openshift_fqdn: https://api.ocp4.example.com:6443

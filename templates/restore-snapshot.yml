@@ -7,5 +7,5 @@ spec:
   target:
     apiGroup: kubevirt.io
     kind: VirtualMachine
-    name: rhel8-vm-01
+    name: "{{ vm_name }}"
   virtualMachineSnapshotName: "{{ vm_name }}-snapshot-01"
