@@ -85,3 +85,14 @@
                   chpasswd: { expire: False }
               name: cloudinitdisk
         wait: true
+
+    - name: Wait for virtual machine IP to be populated
+      kubernetes.core.k8s_info:
+        api_version: kubevirt.io/v1
+        kind: VirtualMachineInstance
+        name: "{{ vm_name }}"
+        namespace: "{{ vm_namespace }}"
+      register: vmi
+      retries: 60
+      delay: 10
+      until: (vmi.resources[0].status.interfaces[0]['ipAddress'] | default('')) | length > 0
