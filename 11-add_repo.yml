@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "namespace_{{ vm_name }}"
   gather_facts: yes
   tasks:
 #    - name: Delete the default route for public network
