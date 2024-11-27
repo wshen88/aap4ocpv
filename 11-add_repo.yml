@@ -2,9 +2,6 @@
 - hosts: all
   gather_facts: yes
   tasks:
-#    - name: Delete the default route for public network
-#      ansible.builtin.command: ip route del default dev eth0
-
     - name: "Configure BaseOS repository for RHEL 9"
       ansible.builtin.yum_repository:
         name: rhel9-baseos
@@ -22,5 +19,11 @@
         description: "AppStream repo for RHEL 9"
       when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] == "9"
     
+    - name: Disable IPV6 setting 
+      ansible.builtin.command: nmcli connection modify "System eth0" ipv6.method "disabled"
+
+    - name: Restart connection 
+      ansible.builtin.command: nmcli connection up "System eth0"
+
     - name: Ensure all repositories are cleaned and refreshed
       ansible.builtin.command: yum clean all
