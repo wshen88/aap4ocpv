@@ -96,6 +96,6 @@
         name: "{{ vm_name }}"
         namespace: "{{ vm_namespace }}"
       register: vmi
-      retries: 60
+      retries: 10
       delay: 10
       until: (vmi.resources[0].status.interfaces[0]['ipAddress'] | default('')) | length > 0
