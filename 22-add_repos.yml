@@ -1,0 +1,45 @@
+---
+- hosts: all
+  gather_facts: yes
+  vars:
+    vm_env_id: store-dev
+    vm_db_suffix: db
+    vm_db_name: "{{ vm_env_id }}-{{ vm_db_suffix }}"
+    vm_app_suffix: app
+    vm_app_name: "{{ vm_env_id }}-{{ vm_app_suffix }}"
+    vm_hosts:
+      - " {{ vm_db_name }} "
+      - " {{ vm_app_name }} "
+  tasks:
+    - name: "Configure BaseOS repository for RHEL 9"
+      ansible.builtin.yum_repository:
+        name: rhel9-baseos
+        baseurl: http://10.66.208.72/repos/rhel-9-for-x86_64-baseos-rpms
+        enabled: yes
+        gpgcheck: no
+        description: "BaseOS repo for RHEL 9"
+      when: inventory_hostname in vm_hosts
+
+    - name: "Configure AppStream repository for RHEL 9"
+      ansible.builtin.yum_repository:
+        name: rhel9-apps
+        baseurl: http://10.66.208.72/repos/rhel-9-for-x86_64-appstream-rpms
+        enabled: yes
+        gpgcheck: no
+        description: "AppStream repo for RHEL 9"
+      when: 
+      - ansible_facts['os_family'] == "RedHat"
+      - ansible_facts['distribution_major_version'] == "9"
+      - inventory_hostname in vm_hosts
+    
+    - name: Disable IPV6 setting 
+      ansible.builtin.command: nmcli connection modify "System eth0" ipv6.method "disabled"
+      when: inventory_hostname in vm_hosts
+
+    - name: Restart connection 
+      ansible.builtin.command: nmcli connection up "System eth0"
+      when: inventory_hostname in vm_hosts
+
+    - name: Ensure all repositories are cleaned and refreshed
+      ansible.builtin.command: yum clean all
+      when: inventory_hostname in vm_hosts
