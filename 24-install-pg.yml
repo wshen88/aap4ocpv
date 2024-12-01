@@ -1,0 +1,13 @@
+- name: Install and config postgresql version 13
+  #hosts: all
+  hosts: "{{ vm_env_id }}-{{ vm_db_suffix }}"
+  gather_facts: false
+  become: yes
+  become_user: root
+  collections:
+    - redhat.rhel_system_roles
+  roles:
+    - postgresql
+  vars:
+    postgresql_version: "13"
+    postgresql_password: pgpasswd
