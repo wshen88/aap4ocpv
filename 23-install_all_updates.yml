@@ -1,0 +1,22 @@
+---
+- name: Basic System Setup
+  hosts: all
+  become: true
+  vars:
+    vm_namespace: wm-test
+    vm_env_id: store-dev
+    vm_db_suffix: db
+    vm_db_name: "{{ vm_env_id }}-{{ vm_db_suffix }}"
+    vm_app_suffix: app
+    vm_app_name: "{{ vm_env_id }}-{{ vm_app_suffix }}"
+
+    vm_hosts:
+      - "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_db_suffix }}"
+      - "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_app_suffix }}"
+  tasks:
+    - name: Install security updates 
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        update_only: true
+      when: inventory_hostname in vm_hosts
