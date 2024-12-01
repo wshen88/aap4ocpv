@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  gather_facts: yes
+  gather_facts: false
   vars:
     vm_env_id: store-dev
     vm_db_suffix: db
@@ -8,9 +8,17 @@
     vm_app_suffix: app
     vm_app_name: "{{ vm_env_id }}-{{ vm_app_suffix }}"
     vm_hosts:
-      - " {{ vm_db_name }} "
-      - " {{ vm_app_name }} "
+      - "{{ vm_namespace }}-{{ vm_db_name }}"
+      - "{{ vm_namespace }}-{{ vm_app_name }}"
   tasks:
+    - name: Print created hostname
+      ansible.builtin.debug:
+        var: vm_hosts
+
+    - name: Print current hostname
+      ansible.builtin.debug:
+        var: inventory_hostname
+
     - name: "Configure BaseOS repository for RHEL 9"
       ansible.builtin.yum_repository:
         name: rhel9-baseos
