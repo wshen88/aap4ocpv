@@ -1,6 +1,6 @@
 - name: Install and config postgresql version 13
   #hosts: all
-  hosts: "{{ vm_env_id }}-{{ vm_db_suffix }}"
+  hosts: "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_db_suffix }}"
   gather_facts: false
   become: yes
   become_user: root
