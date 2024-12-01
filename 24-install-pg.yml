@@ -1,6 +1,6 @@
 - name: Install and config postgresql version 13
-  #hosts: all
-  hosts: "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_db_suffix }}"
+  hosts: all
+  #hosts: "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_db_suffix }}"
   gather_facts: false
   become: yes
   become_user: root
@@ -11,3 +11,8 @@
   vars:
     postgresql_version: "13"
     postgresql_password: pgpasswd
+
+  tasks:
+    - name: Print host name
+      ansible.builtin.debug:
+        var: "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_db_suffix }}"
