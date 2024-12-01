@@ -8,8 +8,9 @@
     vm_app_suffix: app
     vm_app_name: "{{ vm_env_id }}-{{ vm_app_suffix }}"
     vm_hosts:
-      - "{{ vm_namespace }}-{{ vm_db_name }}"
-      - "{{ vm_namespace }}-{{ vm_app_name }}"
+      - "{{ vm_db_name }}"
+      #- "{{ vm_namespace }}-{{ vm_db_name }}"
+#      - "{{ vm_namespace }}-{{ vm_app_name }}"
   tasks:
     - name: Print created hostname
       ansible.builtin.debug:
