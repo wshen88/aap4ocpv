@@ -5,12 +5,14 @@
     vm_env_id: store-dev
     vm_db_suffix: db
     vm_db_name: "{{ vm_env_id }}-{{ vm_db_suffix }}"
+    vm_db_fullname: "{{ vm_namespace }}-{{ vm_db_name }}" 
     vm_app_suffix: app
     vm_app_name: "{{ vm_env_id }}-{{ vm_app_suffix }}"
-    my_hyphen:"-"
+    vm_app_fullname: "{{ vm_namespace }}-{{ vm_app_name }}"
+
     vm_hosts:
-      - "{{ vm_namespace }}{{my_hyphen}}{{ vm_db_name }}"
-      - "{{ vm_namespace }}{{my_hyphen}}{{ vm_app_name }}"
+      - "{{ vm_db_fullname }}"
+      - "{{ vm_app_fullname }}"
   tasks:
     - name: Print created hostname
       ansible.builtin.debug:
