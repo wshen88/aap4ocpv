@@ -1,5 +1,6 @@
-- name: Create a virtual machine
+- name: Create PostgreSQL database and JBoss EAP VMs
   hosts: localhost
+  gather_facts: false
   vars:
     vm_env_id: store-dev
     vm_db_suffix: db
@@ -178,6 +179,6 @@
         name: "{{ vm_app_name }}"
         namespace: "{{ vm_namespace }}"
       register: vmi
-      retries: 10
+      retries: 20
       delay: 10
       until: (vmi.resources[0].status.interfaces[0]['ipAddress'] | default('')) | length > 0
