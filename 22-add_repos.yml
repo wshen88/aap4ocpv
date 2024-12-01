@@ -13,13 +13,9 @@
       - "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_db_suffix }}"
       - "{{ vm_namespace }}-{{ vm_env_id }}-{{ vm_app_suffix }}"
   tasks:
-    - name: Print created hostname
-      ansible.builtin.debug:
-        var: vm_hosts
-
-    - name: Print current hostname
-      ansible.builtin.debug:
-        var: inventory_hostname
+    #- name: Print created hostname
+    #  ansible.builtin.debug:
+    #    var: vm_hosts
 
     - name: "Configure BaseOS repository for RHEL 9"
       ansible.builtin.yum_repository:
@@ -37,10 +33,10 @@
         enabled: yes
         gpgcheck: no
         description: "AppStream repo for RHEL 9"
-      when: 
-      - ansible_facts['os_family'] == "RedHat"
-      - ansible_facts['distribution_major_version'] == "9"
-      - inventory_hostname in vm_hosts
+      when: inventory_hostname in vm_hosts
+      #- ansible_facts['os_family'] == "RedHat"
+      #- ansible_facts['distribution_major_version'] == "9"
+      #- inventory_hostname in vm_hosts
     
     - name: Disable IPV6 setting 
       ansible.builtin.command: nmcli connection modify "System eth0" ipv6.method "disabled"
