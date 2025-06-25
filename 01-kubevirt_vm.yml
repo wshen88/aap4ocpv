@@ -34,7 +34,7 @@
             spec:
               source:
                 pvc:
-                  name: rhel-9.4-gold-image
+                  name: rhel-9.4-golden
                   namespace: openshift-virtualization-os-images
               storage:
                 resources:
